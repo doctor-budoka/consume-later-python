@@ -8,6 +8,7 @@ packages = [{include = "consume_later_py"}]
 
 [tool.poetry.dependencies]
 python = "3.10.10"
+fastapi = {extras = ["all"], version = "^0.95.2"}
 
 
 [build-system]
