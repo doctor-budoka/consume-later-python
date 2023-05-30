@@ -1,27 +1,17 @@
-from enum import Enum
 from fastapi import FastAPI
-from pydantic import BaseModel
+import ibis
 
+from utils.data import MediaType, Item
 
-class MediaType(str, Enum):
-    game = "game"
-    movie = "movie"
-    series = "series"
-    album = "album"
-    band = "band"
-
-
-class Item(BaseModel):
-    name: str
-    platform: str | None = None
-    genre: str | None = None
-    url: str | None = None
-
-
+con = ibis.sqlite.connect("data.db")
 app = FastAPI()
+
 
 @app.post("/{media_type}/")
 async def add(media_type: MediaType, item: Item):
+    table = con.table(media_type.value)
+    table.a
+
     return {"message": "Hello World"}
 
 
