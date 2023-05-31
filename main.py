@@ -1,6 +1,7 @@
+import sqlite3
+from typing import Dict, List
 from fastapi import FastAPI
 import ibis
-import sqlite3
 
 from utils.data import MediaType, Item
 
@@ -22,8 +23,8 @@ def add(media_type: MediaType, item: Item):
     con.commit()
 
 
-@app.get("/get/{media_type}/{name}/", response_model=Item)
-def get(media_type: MediaType, name: str):
+@app.get("/get/{media_type}/{name}/")
+def get(media_type: MediaType, name: str) -> Dict:
     table = i_con.table(media_type.value)
     res = table.filter(table.name == name)
     
@@ -34,10 +35,8 @@ def get(media_type: MediaType, name: str):
         return {}
 
 
-@app.post("/list/{media_type}/", response_model=Item)
-def list(media_type: MediaType):
+@app.get("/list/{media_type}/")
+def list(media_type: MediaType) -> List[Dict]:
     table = i_con.table(media_type.value)
-    if table.count() > 100:
-        return table[:100]
-    else:
-        return table
+    ans = table.head(100).execute()
+    return ans.to_dict("records")
