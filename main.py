@@ -5,6 +5,7 @@ import sqlite3
 from utils.data import MediaType, Item
 
 i_con = ibis.sqlite.connect("data.db")
+ibis.options.interactive = False
 app = FastAPI()
 
 
@@ -21,17 +22,19 @@ def add(media_type: MediaType, item: Item):
     con.commit()
 
 
-@app.get("/{media_type}/{name}", response_model=Item)
+@app.get("/get/{media_type}/{name}/", response_model=Item)
 def get(media_type: MediaType, name: str):
     table = i_con.table(media_type.value)
     res = table.filter(table.name == name)
-    if res.count() > 0:
-        return res[0]
+    
+    if res.count().execute() > 0:
+        print(res.head(1).execute().iloc[0].to_dict())
+        return res.head(1).execute().iloc[0].to_dict()
     else:
         return {}
 
 
-@app.post("/{media_type}/", response_model=Item)
+@app.post("/list/{media_type}/", response_model=Item)
 def list(media_type: MediaType):
     table = i_con.table(media_type.value)
     if table.count() > 100:

@@ -7,6 +7,12 @@ def add_data(media_type, item):
     print(result)
 
 
+def get_item(media_type, name):
+    result = requests.get(f"http://127.0.0.1:8000/get/{media_type}/{name}/")
+    print(result)
+    print(result.json())
+
+
 if __name__ == "__main__":
     new_item = Item(
         name="Star Wars Jedi: Survivor",
@@ -14,4 +20,5 @@ if __name__ == "__main__":
         genre="action-adventure",
         url="https://en.wikipedia.org/wiki/Star_Wars_Jedi:_Survivor",
     )
-    add_data("game", new_item)
+    # add_data("game", new_item)
+    get_item("game", new_item.name)
