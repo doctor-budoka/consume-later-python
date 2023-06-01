@@ -12,6 +12,7 @@ fastapi = {extras = ["all"], version = "^0.95.2"}
 pydantic = "^1.10.8"
 ibis-framework = {extras = ["sqlite"], version = "^5.1.0"}
 requests = "^2.31.0"
+sqlalchemy = "^2.0.15"
 
 
 [build-system]
